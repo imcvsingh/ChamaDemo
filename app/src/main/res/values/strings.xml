@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Chama Demo</string>
+    <string name="error_msg">An error occurred while loading the data</string>
+</resources>
