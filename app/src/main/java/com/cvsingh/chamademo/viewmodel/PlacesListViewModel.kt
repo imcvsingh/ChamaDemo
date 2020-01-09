@@ -68,7 +68,7 @@ class PlacesListViewModel(): ViewModel(){
                 15000,
                 "Restaurant",
                 //"cruise",
-                "AIzaSyDOJEpZU5bnyGrXKPj8gSM4w_IndnyeqRg"
+                "GoogleApiKey"
             )
          .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
