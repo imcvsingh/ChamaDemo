@@ -12,7 +12,7 @@ interface ApiService {
 
     companion object {
         const val ENDPOINT = "https://rebrickable.com/api/v3/"
-        const val URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=28.5355,77.3910&radius=15000&type=restaurant&keyword=cruise&key=AIzaSyDOJEpZU5bnyGrXKPj8gSM4w_IndnyeqRg"
+        const val URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=28.5355,77.3910&radius=15000&type=restaurant&keyword=cruise&key=GoogleApiKey"
     }
 
     @GET("location/{location}/radius/{radius}/type/{type}/key/{key}/")
