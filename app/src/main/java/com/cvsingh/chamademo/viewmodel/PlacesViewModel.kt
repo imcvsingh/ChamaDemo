@@ -10,7 +10,7 @@ class PlacesViewModel: ViewModel() {
 
     fun bind(post: PlaceModel){
         postTitle.value = post.name
-        postBody.value = post.place_id
+        postBody.value = "Rating: "+post.rating
     }
 
     fun getPostTitle():MutableLiveData<String>{

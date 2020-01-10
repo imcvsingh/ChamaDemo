@@ -2,36 +2,29 @@ package com.cvsingh.chamademo.viewmodel
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import android.util.Log
 import android.view.View
+import android.widget.Toast
 import com.cvsingh.chamademo.R
 import com.cvsingh.chamademo.api.ApiService
-import com.cvsingh.chamademo.model.Location
 import com.cvsingh.chamademo.model.PlaceModel
-import com.cvsingh.chamademo.utils.BASE_URL
-import com.cvsingh.chamademo.view.PlacesListAdapter
-import io.reactivex.Observable
+import com.cvsingh.chamademo.utils.extensions.getParentActivity
+import com.cvsingh.chamademo.view.adapters.PlacesListAdapter
+import com.cvsingh.chamademo.view.listeners.OnRecyclerViewItemClickListener
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.moshi.MoshiConverterFactory
-import java.util.*
-import java.util.concurrent.TimeUnit
 
-class PlacesListViewModel(): ViewModel(){
+class PlacesListViewModel() : ViewModel(), OnRecyclerViewItemClickListener {
 
-    val placesListAdapter: PlacesListAdapter = PlacesListAdapter()
+    private lateinit var resultsList: List<PlaceModel>
+    val placesListAdapter = PlacesListAdapter()
 
     val loadingVisibility: MutableLiveData<Int> = MutableLiveData()
-    val errorMessage:MutableLiveData<Int> = MutableLiveData()
+    val errorMessage: MutableLiveData<Int> = MutableLiveData()
 
     private lateinit var subscription: Disposable
 
-    init{
+    init {
         loadPosts()
     }
 
@@ -40,62 +33,46 @@ class PlacesListViewModel(): ViewModel(){
         subscription.dispose()
     }
 
-    private fun loadPosts(){
-        val interceptor = HttpLoggingInterceptor()
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-
-        val okHttpClient = OkHttpClient.Builder()
-            .addInterceptor(interceptor)
-            .connectTimeout(30, TimeUnit.SECONDS)
-            .writeTimeout(30, TimeUnit.SECONDS)
-            .readTimeout(30, TimeUnit.SECONDS)
-            .build()
-
-        //Build a Retrofit object//
-        val requestInterface = Retrofit.Builder()
-            .client(okHttpClient)
-            .baseUrl(BASE_URL)
-            .addConverterFactory(MoshiConverterFactory.create())
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-
-            //Get a usable Retrofit object by calling .build()//
-            .build().create(ApiService::class.java)
-
-        val location = "28.5355,77.3910"
+    private fun loadPosts() {
         subscription =
-            requestInterface.getPlacesList(
+            ApiService.requestInterface.getPlacesList(
                 "28.5355,77.3910",
                 15000,
                 "Restaurant",
-                //"cruise",
                 "AIzaSyDOJEpZU5bnyGrXKPj8gSM4w_IndnyeqRg"
             )
-         .subscribeOn(Schedulers.io())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe { onRetrievePostListStart() }
                 .doOnTerminate { onRetrievePostListFinish() }
                 .subscribe(
 
-                        { result -> onRetrievePostListSuccess(result.results) },
-                        { onRetrievePostListError() }
+                    { result -> onRetrievePostListSuccess(result.results) },
+                    { onRetrievePostListError() }
                 )
     }
 
-    private fun onRetrievePostListStart(){
+    private fun onRetrievePostListStart() {
         loadingVisibility.value = View.VISIBLE
         errorMessage.value = null
     }
 
-    private fun onRetrievePostListFinish(){
+    private fun onRetrievePostListFinish() {
         loadingVisibility.value = View.GONE
     }
 
-    private fun onRetrievePostListSuccess(resultsList:List<PlaceModel>){
-        placesListAdapter.updatePostList(resultsList)
+    private fun onRetrievePostListSuccess(resultsList: List<PlaceModel>) {
+        this.resultsList = resultsList
+        placesListAdapter.updatePostList(resultsList, this)
     }
 
-    private fun onRetrievePostListError(){
+    private fun onRetrievePostListError() {
         loadingVisibility.value = View.GONE
         errorMessage.value = R.string.error_msg
+    }
+
+    override fun onItemClick(view: View, position: Int) {
+        Toast.makeText(view.getParentActivity(), resultsList.get(position).name, Toast.LENGTH_LONG)
+            .show()
     }
 }
