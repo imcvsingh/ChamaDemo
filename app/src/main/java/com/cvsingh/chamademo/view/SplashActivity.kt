@@ -16,5 +16,6 @@ class SplashActivity : AppCompatActivity() {
         //intent.putExtra("keyIdentifier", value)
 // start your next activity
         startActivity(intent)
+        finish()
     }
 }
