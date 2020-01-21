@@ -40,11 +40,11 @@ class PlacesListAdapter: RecyclerView.Adapter<PlacesListAdapter.ViewHolder>() {
         fun bind(result:PlaceModel){
             viewModel.bind(result)
             binding.viewModel = viewModel
-            binding.postBody.setOnClickListener(this)
+            binding.root.setOnClickListener(this)
         }
 
         override fun onClick(v: View?) {
-            listener.onItemClick(binding.postBody, adapterPosition)
+            listener.onItemClick(binding.root, adapterPosition)
         }
     }
 }
