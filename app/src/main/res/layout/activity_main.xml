@@ -1,40 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical"
-    android:padding="25dp"
-    tools:context=".view.MainActivity">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <Button
-        android:id="@+id/btCafe"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/btn_background"
-        android:padding="10dp"
-        android:text="Cafe"
-        android:textColor="@color/white"
-        android:textSize="@dimen/btn_text_size" />
+    <data>
 
-    <Button
-        android:id="@+id/btRestaurant"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="30dp"
-        android:background="@drawable/btn_background"
-        android:text="Restaurant"
-        android:textColor="@color/white"
-        android:textSize="@dimen/btn_text_size" />
+        <variable
+            name="viewModel"
+            type="com.cvsingh.chamademo.viewmodel.MainActivityViewModel" />
+    </data>
 
-    <Button
-        android:id="@+id/btBar"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/btn_background"
-        android:text="Bar"
-        android:textColor="@color/white"
-        android:textSize="@dimen/btn_text_size" />
-</LinearLayout>
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="25dp"
+        tools:context=".view.MainActivity">
+
+        <Button
+            android:id="@+id/btCafe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_background"
+            android:padding="10dp"
+            android:onClick="@{(v)-> viewModel.onClick(v)}"
+            android:text="Cafe"
+            android:textColor="@color/white"
+            android:textSize="@dimen/btn_text_size" />
+
+        <Button
+            android:id="@+id/btRestaurant"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp"
+            android:background="@drawable/btn_background"
+            android:onClick="@{(v)-> viewModel.onClick(v)}"
+            android:text="Restaurant"
+            android:textColor="@color/white"
+            android:textSize="@dimen/btn_text_size" />
+
+        <Button
+            android:id="@+id/btBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_background"
+            android:onClick="@{(v)-> viewModel.onClick(v)}"
+            android:text="Bar"
+            android:textColor="@color/white"
+            android:textSize="@dimen/btn_text_size" />
+    </LinearLayout>
+</layout>

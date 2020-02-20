@@ -1,10 +1,12 @@
 package com.cvsingh.chamademo.viewmodel
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.lifecycle.AndroidViewModel
 import com.cvsingh.chamademo.R
 import com.cvsingh.chamademo.api.ApiService
 import com.cvsingh.chamademo.model.PlaceModel
@@ -15,10 +17,13 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
-class PlacesListViewModel() : ViewModel(), OnRecyclerViewItemClickListener {
+class PlacesListViewModel : ViewModel(), OnRecyclerViewItemClickListener {
+
 
     private lateinit var resultsList: List<PlaceModel>
     val placesListAdapter = PlacesListAdapter()
+
+    val type: MutableLiveData<String> = MutableLiveData()
 
     val loadingVisibility: MutableLiveData<Int> = MutableLiveData()
     val errorMessage: MutableLiveData<Int> = MutableLiveData()
@@ -37,20 +42,21 @@ class PlacesListViewModel() : ViewModel(), OnRecyclerViewItemClickListener {
     private fun loadPosts() {
         subscription =
             ApiService.requestInterface.getPlacesList(
-                "28.5355,77.3910",
+                    "28.5355,77.3910",
                 15000,
-                "Restaurant",
+                "RESTRAURANT",
                 //"cruise",
-                "GoogleApiKey"
+                "AIzaSyCFvoeSwDO9T2mdRT3T8PPjPST5e8qp39w"
             )
          .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe { onRetrievePostListStart() }
                 .doOnTerminate { onRetrievePostListFinish() }
+                .doOnError { throwable ->Log.e("Hello", "Error: ${throwable.message}") }
                 .subscribe(
 
-                    { result -> onRetrievePostListSuccess(result.results) },
-                    { onRetrievePostListError() }
+                    { result ->Log.e("Hello", "Success: ${result.status} results")},
+                    { Log.e("Hello", "Error: ") }
                 )
     }
 
@@ -64,6 +70,7 @@ class PlacesListViewModel() : ViewModel(), OnRecyclerViewItemClickListener {
     }
 
     private fun onRetrievePostListSuccess(resultsList: List<PlaceModel>) {
+        Log.e("Hello", "Success: $resultsList")
         this.resultsList = resultsList
         placesListAdapter.updatePostList(resultsList, this)
     }
@@ -71,6 +78,7 @@ class PlacesListViewModel() : ViewModel(), OnRecyclerViewItemClickListener {
     private fun onRetrievePostListError() {
         loadingVisibility.value = View.GONE
         errorMessage.value = R.string.error_msg
+        Log.e("Hello", "Error: ")
     }
 
 

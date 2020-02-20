@@ -1,7 +1,7 @@
 package com.cvsingh.chamademo.view.adapters
 
-import android.databinding.DataBindingUtil
-import android.support.v7.widget.RecyclerView
+import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,7 +34,8 @@ class PlacesListAdapter: RecyclerView.Adapter<PlacesListAdapter.ViewHolder>() {
         notifyDataSetChanged()
     }
 
-    inner class ViewHolder(private val binding: ItemPlaceBinding):RecyclerView.ViewHolder(binding.root), View.OnClickListener{
+    inner class ViewHolder(private val binding: ItemPlaceBinding):
+        RecyclerView.ViewHolder(binding.root), View.OnClickListener{
         private val viewModel = PlacesViewModel()
 
         fun bind(result:PlaceModel){
