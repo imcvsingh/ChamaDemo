@@ -46,7 +46,7 @@ class PlacesListViewModel : ViewModel(), OnRecyclerViewItemClickListener {
                 15000,
                 "RESTRAURANT",
                 //"cruise",
-                "AIzaSyCFvoeSwDO9T2mdRT3T8PPjPST5e8qp39w"
+                "API_KEY"
             )
          .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
